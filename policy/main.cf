@@ -45,9 +45,6 @@ bundle agent _inventory_sudoers( users, refresh_frequency, inventory_prefix )
 {
   vars:
       !windows::
-      "data"
-        data => '{"can": "I has inventory of data containers?" }',
-        meta => { "inventory", "attribute_name=Data Container"};
 
 @if minimum_version(3.12)
       "cache"
