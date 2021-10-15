@@ -1,0 +1,104 @@
+body file control
+{
+      namespace => "nickanderson";
+}
+bundle agent inventory_sudoers
+# @brief Inventory users sudo access
+# @variable nickanderson:inventory_sudoers._users_list_var defines the name of the variable expected to hold use set of users to evaluate for sudo access
+# @variable nickanderson:inventory_sudoers._users The default variable to use when evaluating sudo access which defaults to the list of users from /etc/passwd
+# @variable nickanderson:inventory_sudoers._refresh_frequency_min How long to wait before clearing cache and re-evaluating which users have sudo access
+{
+  vars:
+      "_users_list_var"
+        string => "$(this.namespace):$(this.bundle)._users",
+        unless => isvariable( _users_var ); # Default to _users variable for users to consider
+
+      "_users"
+        slist => getindices( data_readstringarray( "/etc/passwd", "", ":", inf, inf )),
+        unless => isvariable( _users );
+
+      "_refresh_frequency_min"
+        string => "30",
+        unless => isvariable( _refresh_frequency );
+
+  methods:
+      "Inventory Sudoers"
+        usebundle => _inventory_sudoers(
+                                         "@($(_users_var))",
+                                         $(_refresh_frequency_min),
+                                         "" ); # No prefix, too complex for
+                                               # users in the simple case.
+                                               # Expected use is another bundle
+                                               # where a specific set of users
+                                               # has been inventoried
+                                               # separately, e.g. from lastlog
+                                               # or something
+
+}
+
+bundle agent _inventory_sudoers( users, refresh_frequency, inventory_prefix )
+# @param users A list of users to check for sudo access
+# @note Consider getting users by parsing /etc/passed, or from recently logged in users
+# Example Cache: $(sys.statedir)/lastlog_users_with_sudo.module.cache
+# markburgess
+# nickanderson
+{
+  vars:
+      !windows::
+      "data"
+        data => '{"can": "I has inventory of data containers?" }',
+        meta => { "inventory", "attribute_name=Data Container"};
+
+@if minimum_version(3.12)
+      "cache"
+        string => "$(sys.statedir)/$(with)_users_with_sudo.module.cache.d",
+        with => canonify( $(inventory_prefix) );
+@endif
+
+      # "has_sudo[$(users)]"
+      #   string => "$(users)",
+      #   if => regcmp( ".*User $(users) may run.*",
+      #                 execresult( "/usr/bin/sudo -l -U $(users)", noshell)),
+      #   unless => fileexists( $(cache) ),
+      #   meta => { "inventory", "attribute_name=$(inventory_prefix)User with sudo" };
+
+      "users"
+        slist => lsdir( "$(cache)/", "(?!\.|\.\.).*", false ),
+        if => isdir( $(cache) );
+
+      "sudo[$(users)]"
+        string => "$(users)",
+        meta => { "inventory", "attribute_name=$(inventory_prefix)User with sudo" };
+
+  files:
+
+      "$(cache)/.*"
+        delete => default:tidy,
+        action => default:if_elapsed( $(refresh_frequency) );
+
+      "$(cache)/."
+        create => "true";
+
+      # We have a file semaphore for each user who has sudo access
+      "$(cache)/$(users)"
+        create => "true",
+        touch => "true",
+        if => regcmp( ".*User $(users) may run.*",
+                      execresult( "/usr/bin/sudo -l -U $(users)", noshell)),
+        action => default:if_elapsed( $(refresh_frequency) );
+
+
+      # Watch out, unknown users need special handling
+      # If we iterate over known users this isn't likely to be an issue.
+      # If we base it off lastlog or last information, then possibly well have an entry for a user that no longer exists.
+
+      # "$(users) doesn't have sudo access"
+      #   if => regcmp( "(User $(users) is not allowed.*)|(.*unknown user.*)",
+      #                 execresult( "/usr/bin/sudo -l -U $(users) 2>&1", useshell));
+}
+bundle agent __main__
+{
+  methods:
+      "Inventory Local users who are sudoers"
+        usebundle => nickanderson:inventory_sudoers;
+}

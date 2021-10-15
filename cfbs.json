@@ -1,0 +1,16 @@
+{
+    "modules": {
+        "inventory-sudoers": {
+            "description": "Inventory users with sudo access.",
+            "tags": ["inventory", "sudo"],
+            "by": "https://github.com/nickanderson",
+            "version": "1.0.0",
+            "commit": "",
+            "steps": [
+                "copy ./policy/main.cf services/inventory-sudoers/main.cf",
+                "json ./cfbs/def.json def.json"
+            ]
+        }
+    }
+}
+

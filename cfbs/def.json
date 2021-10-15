@@ -1,0 +1,7 @@
+{
+    "vars":{
+        "control_common_bundlesequence_classification": [ "nickanderson:inventory_sudoers" ]
+    },
+
+    "inputs": [ "services/inventory-sudoers/main.cf" ]
+}

@@ -1,0 +1,3 @@
+#+title: Inventory users that have sudo access
+
+This policy inventories users that have sudo access from a set of users. By default local users are considered (e.g. those with entries in =/etc/passwd=).
