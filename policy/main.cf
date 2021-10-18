@@ -80,7 +80,7 @@ bundle agent _inventory_sudoers( candidates, refresh_frequency, inventory_prefix
         touch => "true",
         if => regcmp( ".*User $(candidates) may run.*",
                       execresult( "/usr/bin/sudo -l -U $(candidates)", noshell)),
-        action => default:if_elapsed( $(refresh_frequency) );
+        action => default:if_elapsed( $(refresh_frequency) ); # Weak guard, based on promise locking, -K will bypass
 
 
       # Watch out, unknown users need special handling
