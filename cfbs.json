@@ -4,6 +4,7 @@
             "description": "Inventory users with sudo access.",
             "tags": ["inventory", "sudo"],
             "by": "https://github.com/nickanderson",
+            "repo": "https://github.com/nickanderson/cfengine-inventory-sudoers",
             "version": "1.0.0",
             "commit": "",
             "steps": [
