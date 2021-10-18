@@ -64,7 +64,7 @@ bundle agent _inventory_sudoers( candidates, refresh_frequency, inventory_prefix
   files:
 
       "$(cache)/.*"
-        handle => "$(this.bundle)_$(this.namespace)_purge_inventory_sudoers_cache",
+        handle => "$(this.namespace)_$(this.bundle)_purge_inventory_sudoers_cache",
         delete => default:tidy,
         action => default:if_elapsed( $(refresh_frequency) ),
         classes => persistent_results( "30", "$(this.namespace)_$(this.bundle)_sudoers_cache_purged" ),
@@ -75,7 +75,7 @@ bundle agent _inventory_sudoers( candidates, refresh_frequency, inventory_prefix
 
       # We have a file semaphore for each user who has sudo access
       "$(cache)/$(candidates)"
-        handle => "$(this.bundle)_$(this.namespace)_inventory_user_with_sudo_access_$(candidates)",
+        handle => "$(this.namespace)_$(this.bundle)_inventory_user_with_sudo_access_$(candidates)",
         create => "true",
         touch => "true",
         if => regcmp( ".*User $(candidates) may run.*",
