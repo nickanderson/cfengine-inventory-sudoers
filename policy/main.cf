@@ -4,9 +4,9 @@ body file control
 }
 bundle agent _inventory_sudoers_main
 # @brief Inventory users sudo access
-# @variable nickanderson:inventory_sudoers._users_list_var defines the name of the variable expected to hold use set of users to evaluate for sudo access
-# @variable nickanderson:inventory_sudoers._users The default variable to use when evaluating sudo access which defaults to the list of users from /etc/passwd
-# @variable nickanderson:inventory_sudoers._refresh_frequency_min How long to wait before clearing cache and re-evaluating which users have sudo access
+# @variable nickanderson:_inventory_sudoers_main._users_list_var defines the name of the variable expected to hold use set of users to evaluate for sudo access
+# @variable nickanderson:_inventory_sudoers_main._users The default variable to use when evaluating sudo access which defaults to the list of users from /etc/passwd
+# @variable nickanderson:_inventory_sudoers_main._refresh_frequency_min How long to wait before clearing cache and re-evaluating which users have sudo access
 {
   vars:
       "_users_list_var"
