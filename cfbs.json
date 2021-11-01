@@ -1,12 +1,12 @@
 {
-    "modules": {
+    "name": "inventory-sudoers",
+    "description": "Inventory users with sudo access.",
+    "provides": {
         "inventory-sudoers": {
             "description": "Inventory users with sudo access.",
             "tags": ["inventory", "sudo"],
             "by": "https://github.com/nickanderson",
             "repo": "https://github.com/nickanderson/cfengine-inventory-sudoers",
-            "version": "1.0.0",
-            "commit": "",
             "steps": [
                 "copy ./policy/main.cf services/inventory-sudoers/main.cf",
                 "json ./cfbs/def.json def.json"
