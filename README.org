@@ -1,3 +1,12 @@
 #+title: Inventory users that have sudo access
 
 This policy inventories users that have sudo access from a set of users. By default local users are considered (e.g. those with entries in =/etc/passwd=).
+
+* Installation via cfbs
+
+#+begin_example
+❯ cfbs search inventory-sudoers
+inventory-sudoers - Inventory users with sudo access.
+❯ cfbs add inventory-sudoers
+Added module: inventory-sudoers
+#+end_example
