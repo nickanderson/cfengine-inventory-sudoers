@@ -12,7 +12,7 @@
 
 * Variables
 
--  /nickanderson:_inventory_sudoers_main._users_list_var/ (=String=) :: Defines the name of the variable expected to hold use set of users to evaluate for sudo access
+-  /nickanderson:_inventory_sudoers_main._users_list_var/ (=String=) :: Defines the name of the variable expected to hold a set of users to evaluate for sudo access, defaults to =nickanderson:_inventory_sudoers_main._users=
 
 -  /nickanderson:_inventory_sudoers_main._users/ (=List=) :: The default variable to use when evaluating sudo access which defaults to the list of users from =/etc/passwd=
 
