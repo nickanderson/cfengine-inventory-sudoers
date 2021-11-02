@@ -16,13 +16,13 @@
 
 -  /nickanderson:_inventory_sudoers_main._users/ (=List=) :: The default variable to use when evaluating sudo access which defaults to the list of users from =/etc/passwd=
 
--  /nickanderson:_inventory_sudoers_main._refresh_frequency_min/ (=Int=) :: How long to wait before clearing cache and re-evaluating which users have sudo access
+-  /nickanderson:_inventory_sudoers_main._refresh_frequency_min/ (=Int=) :: How long to wait before clearing cache and re-evaluating which users have sudo access, by default =30=
 
 * Examples
 
 ** Set the list of users to check for sudo access
 
-As of 3.18.0, [[https://docs.cfengine.com/docs/3.18/reference-language-concepts-augments.html][Augments]] allows variables to be defined in a specific bundle by leveraging the [[https://docs.cfengine.com/docs/3.18/reference-language-concepts-augments.html#variables][/variables/ key]].
+As of 3.18.0, [[https://docs.cfengine.com/docs/3.18/reference-language-concepts-augments.html][Augments]] allows variables to be defined in a specific bundle by leveraging the [[https://docs.cfengine.com/docs/3.18/reference-language-concepts-augments.html#variables][variables key]].
 
 This Augments sets the list of users to check for sudo access:
 
