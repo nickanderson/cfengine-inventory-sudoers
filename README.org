@@ -12,11 +12,11 @@
 
 * Variables
 
--  =nickanderson:_inventory_sudoers_main._users_list_var= (/String/) :: Defines the name of the variable expected to hold use set of users to evaluate for sudo access
+-  /nickanderson:_inventory_sudoers_main._users_list_var/ (=String=) :: Defines the name of the variable expected to hold use set of users to evaluate for sudo access
 
--  =nickanderson:_inventory_sudoers_main._users= (/List/) :: The default variable to use when evaluating sudo access which defaults to the list of users from =/etc/passwd=
+-  /nickanderson:_inventory_sudoers_main._users/ (=List=) :: The default variable to use when evaluating sudo access which defaults to the list of users from =/etc/passwd=
 
--  =nickanderson:_inventory_sudoers_main._refresh_frequency_min= (/Int/) :: How long to wait before clearing cache and re-evaluating which users have sudo access
+-  /nickanderson:_inventory_sudoers_main._refresh_frequency_min/ (=Int=) :: How long to wait before clearing cache and re-evaluating which users have sudo access
 
 * Examples
 
@@ -28,9 +28,11 @@ This Augments sets the list of users to check for sudo access:
 
 #+begin_src json
   {
-      "variables": {
-          "nickanderson:_inventory_sudoers_main._users": [ "luke.skywalker", "minch.yoda", "obiwan.kenobi"]
-      }
+    "variables": {
+      "nickanderson:_inventory_sudoers_main._users": [ "luke.skywalker",
+                                                       "minch.yoda",
+                                                       "obiwan.kenobi" ]
+    }
   }
 #+end_src
 
