@@ -18,7 +18,7 @@ bundle agent _inventory_sudoers_main
         unless => isvariable( _users );
 
       "_refresh_frequency_min"
-        string => "30",
+        int => "30",
         unless => isvariable( _refresh_frequency );
 
   methods:
