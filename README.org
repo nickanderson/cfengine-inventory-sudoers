@@ -3,12 +3,16 @@
 * Synopsis
 
 - *Name*: =inventory-sudoers=
-- *Version*: =1.0.1=
+- *Version*: =1.0.2=
 - *Description*: Inventory users that have sudo access from a set of users.
 
 * Requirements
 
 - CFEngine version 3.18.0 or greater (in order to configure without modification)
+
+* Inventory
+
+- /Users with sudo/ :: List of users that have sudo access as determined by ~sudo -l -U <USERNAME>~
 
 * Variables
 
