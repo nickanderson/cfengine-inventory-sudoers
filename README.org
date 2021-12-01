@@ -1,10 +1,21 @@
-#+title: Inventory users that have sudo access
+The =sudo= program allows a user to execute a command with elevated privileges.
+It is a good idea to limit and monitor who has access to do this.
+This module will check which users on a system can use sudo (=sudoers=) and report that as part of CFEngine Enterprise Inventory.
+In Mission Portal, the CFEngine Enterprise UI, you can get reports of all users with sudo access across all machines in your infrastructure:
 
-* Synopsis
+[[https://raw.githubusercontent.com/nickanderson/cfengine-inventory-sudoers/main/inventory-screenshot.png][[[https://raw.githubusercontent.com/nickanderson/cfengine-inventory-sudoers/main/inventory-screenshot.png]]]]
 
-- *Name*: =inventory-sudoers=
-- *Version*: =1.0.2=
-- *Description*: Inventory users that have sudo access from a set of users.
+(To see this, go to Reports -> Inventory -> Click the 3 dots at the top of a column -> Insert Column -> Users with sudo)
+
+You can also see the list of sudoers for a single machine from the command line:
+
+#+begin_example
+$ sudo cf-agent --show-evaluated-vars -KI | grep "_inventory_sudoers.users"
+nickanderson:_inventory_sudoers.users     {"root","ubuntu"}                                           source=promise
+#+end_example
+
+*Recommendation:* Review this list on a regular basis, and ensure all of the users really need =sudo= access.
+Remove =sudo= access where possible by [[https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file][editing the =/etc/sudoers= file]].
 
 * Requirements
 
@@ -40,11 +51,76 @@ This Augments sets the list of users to check for sudo access:
   }
 #+end_src
 
-* Installation via cfbs
+** Use with cfbs
 
-#+begin_example
-❯ cfbs search inventory-sudoers
-inventory-sudoers - Inventory users with sudo access.
-❯ cfbs add inventory-sudoers
-Added module: inventory-sudoers
-#+end_example
+The =cfbs= tooling allows you to manage a CFEngine policy set, and all its dependencies in an easy way.
+If you've never used cfbs before, here are the steps to get started.
+
+*** Install dependencies
+
+Before installing and running =cfbs=, you need =pip3= (and Python 3.5 or newer), and autotools (=autoreconf=, =automake=).
+If you don't have these tools already, there are many ways to install them, here are some suggestions for Ubuntu, CentOS and macOS.
+
+*Ubuntu:*
+
+#+begin_src bash
+$ sudo apt-get install -y python3 python3-pip automake
+#+end_src
+
+*CentOS:*
+
+#+begin_src bash
+$ sudo yum install -y python3 python3-pip automake
+#+end_src
+
+*macOS:*
+
+#+begin_src bash
+brew install python3 automake
+#+end_src
+
+*** Install tooling
+
+#+begin_src bash
+$ sudo pip3 install --upgrade pip
+$ sudo pip3 install cfbs cf-remote
+#+end_src
+
+(=cf-remote= is optional, only needed for deploying to remote machines).
+
+*** Create a project
+
+#+begin_src bash
+$ mkdir my-policy-set
+$ cd my-policy-set
+$ cfbs init
+#+end_src
+
+*** Add modules
+
+#+begin_src bash
+$ cfbs add masterfiles
+$ cfbs add inventory-sudoers
+#+end_src
+
+*** Build
+
+#+begin_src bash
+$ cfbs build
+#+end_src
+
+*** Deploy
+
+If you are running CFEngine locally:
+
+#+begin_src bash
+$ sudo cfbs build
+#+end_src
+
+If CFEngine is running on a remote hub:
+
+#+begin_src bash
+$ cf-remote deploy --hub username@1.2.3.4 out/masterfiles.tgz
+#+end_src
+
+(Replace =username@1.2.3.4= with the username / IP you use to SSH to your hub).
