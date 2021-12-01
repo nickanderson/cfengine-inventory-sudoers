@@ -3,7 +3,7 @@ It is a good idea to limit and monitor who has access to do this.
 This module will check which users on a system can use sudo (=sudoers=) and report that as part of CFEngine Enterprise Inventory.
 In Mission Portal, the CFEngine Enterprise UI, you can get reports of all users with sudo access across all machines in your infrastructure:
 
-[[https://raw.githubusercontent.com/nickanderson/cfengine-inventory-sudoers/main/inventory-screenshot.png][[[https://raw.githubusercontent.com/nickanderson/cfengine-inventory-sudoers/main/inventory-screenshot.png]]]]
+[[https://raw.githubusercontent.com/nickanderson/cfengine-inventory-sudoers/main/inventory-screenshot.png]]
 
 (To see this, go to Reports -> Inventory -> Click the 3 dots at the top of a column -> Insert Column -> Users with sudo)
 
