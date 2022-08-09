@@ -61,6 +61,13 @@ bundle agent _inventory_sudoers( candidates, refresh_frequency, inventory_prefix
         string => "$(users)",
         meta => { "inventory", "attribute_name=$(inventory_prefix)Users with sudo" };
 
+      "bin_sudo"
+        string => ifelse( isvariable( "default:paths.sudo" ), "$(default:paths.sudo)",
+                          "/usr/bin/sudo" );
+  classes:
+      "bin_sudo_executable"
+        expression => isexecutable( "$(bin_sudo)" );
+
   files:
 
       "$(cache)/.*"
@@ -73,13 +80,15 @@ bundle agent _inventory_sudoers( candidates, refresh_frequency, inventory_prefix
       "$(cache)/."
         create => "true";
 
+    bin_sudo_executable::
+
       # We have a file semaphore for each user who has sudo access
       "$(cache)/$(candidates)"
         handle => "$(this.namespace)_$(this.bundle)_inventory_user_with_sudo_access_$(candidates)",
         create => "true",
         touch => "true",
         if => regcmp( ".*User $(candidates) may run.*",
-                      execresult( "/usr/bin/sudo -l -U $(candidates)", noshell)),
+                      execresult( "$($(this.namespace):$(this.bundle).bin_sudo) -l -U $(candidates)", noshell)),
         action => default:if_elapsed( $(refresh_frequency) ); # Weak guard, based on promise locking, -K will bypass
 
 
@@ -91,6 +100,10 @@ bundle agent _inventory_sudoers( candidates, refresh_frequency, inventory_prefix
       # "$(users) doesn't have sudo access"
       #   if => regcmp( "(User $(users) is not allowed.*)|(.*unknown user.*)",
       #                 execresult( "/usr/bin/sudo -l -U $(users) 2>&1", useshell));
+
+  reports:
+    !bin_sudo_executable.(inform_mode|verbose_mode|debug_mode).!windows::
+      "Warning: Path to sudo unknown, not updating inventory";
 }
 
 body classes persistent_results( _class_persist_min, _class_prefix )
